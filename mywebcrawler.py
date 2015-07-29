@@ -3,7 +3,7 @@ import re,urllib2,sys,os
 
 def get_links(url):
     try:
-        result = urllib2.urlopen(url)
+        f = urllib2.urlopen(url=url,timeout=3)
     except urllib2.URLError,e:
         if hasattr(e, "code"):
             print "The server couldn't fulfill the request."
@@ -12,10 +12,10 @@ def get_links(url):
             print "We failed to reach a server. Please check your url and read the Reason"
             print "Reason: %s" % e.reason
         sys.exit(2)
-    content = result.read().decode("utf-8")
+    content = f.read().decode("utf-8")
     print "Read webpage successfully."
     pattern = re.compile(r'\stitle.*img\ssrc="(.*)"\salt="(.*)"/></a>')
-    results = re.findall(pattern, content)
+    results = re.findall(pattern, content) #(url,name)
     return results
 
 def file_save((url_avatar,username),count):
